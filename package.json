@@ -8,9 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "publish": "vite build && gh-pages -d dist"
+    "publish": "vite build && cp dist/index.html dist/404.html && gh-pages -d dist --cname konobyos.attendance.zemichaeltesfaye.com"
   },
   "dependencies": {
+    "@yudiel/react-qr-scanner": "^2.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

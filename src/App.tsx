@@ -1,13 +1,23 @@
-import { Scanner } from "@yudiel/react-qr-scanner";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useAuth } from "./context";
+import { Home, Login } from "./pages";
 
 export function App() {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    );
+  }
+
   return (
-    <>
-      <h1>Attendance</h1>
-      <Scanner
-        onScan={(ውጤቶች) => ውጤቶች.map((ውጤት) => alert(JSON.stringify(ውጤት)))}
-        styles={{ container: { width: "100%", height: "100%" } }}
-      />
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }

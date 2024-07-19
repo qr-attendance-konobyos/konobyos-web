@@ -6,6 +6,6 @@ export const useUser = () => {
 
   return useQuery({
     queryKey: ["user-me"],
-    queryFn: () => axios.get("/user").then((res) => res.data),
+    queryFn: () => axios.get("/user").then((res) => res.data.data),
   });
 };

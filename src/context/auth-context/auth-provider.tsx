@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         get token() {
-          if (isTokenExpired(token)) {
+          if (token && isTokenExpired(token)) {
             logout();
             return null;
           }

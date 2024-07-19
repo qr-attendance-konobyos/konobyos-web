@@ -8,9 +8,6 @@ export const useLogin = () => {
     mutationFn: async (data: { phoneNumber: string; pin: string }) =>
       client
         .post("/auth/login", data)
-        .then((res) => res.data)
-        .then(async (data) => {
-          auth.login(data.token);
-        }),
+        .then((data) => auth.login(data.data.data)),
   });
 };

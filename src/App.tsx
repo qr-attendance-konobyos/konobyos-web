@@ -3,7 +3,7 @@ import { useAuth } from "./context";
 import { Home, Login } from "./pages";
 
 export function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, token } = useAuth();
 
   if (!isAuthenticated) {
     return (

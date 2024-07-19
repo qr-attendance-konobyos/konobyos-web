@@ -20,4 +20,8 @@ body {
   flex-direction: column;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 @import "./theme/index.scss";

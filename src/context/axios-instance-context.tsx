@@ -17,12 +17,14 @@ export const AxiosInstanceProvider: React.FC<React.PropsWithChildren> = ({
       },
     });
     instance.interceptors.response.use(
-      (value) => {
-        value.data = value.data?.data;
-        return value;
-      },
+      // (value) => {
+      //   value.data = value.data?.data;
+      //   return value;
+      // },
+      null,
       (error) => {
         logout();
+        console.error(error);
         throw error;
       }
     );

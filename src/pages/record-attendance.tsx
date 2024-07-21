@@ -1,5 +1,6 @@
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import React from "react";
+import { validate } from "uuid";
 import { AttendanceTypes, useCreateAttendanceMutation } from "../api";
 import "./attendance.scss";
 
@@ -11,69 +12,81 @@ export const RecordAttendance = () => {
 
   const handleReadCode = (code: IDetectedBarcode) => {
     if (code.format != "text") return;
+    const value = code.rawValue;
 
-    // create attendance if quick mode is on
+    // make sure it's a valid uuid
+    if (!validate(value)) return;
+
     if (quickMode == "on") {
+      // create attendance if quick mode is on
       // create attendance
       attendanceMutation.mutate({
-        studentId: code.rawValue,
+        studentId: value,
         type,
       });
       return;
     } else {
       // show found user and ask for confirmation
-      setFoundUser(code.rawValue);
+      setFoundUser(value);
     }
   };
 
   function handleRecord() {
     if (foundUser) {
-      attendanceMutation.mutate({
-        studentId: foundUser,
-        type,
-      });
+      attendanceMutation
+        .mutateAsync({
+          studentId: foundUser,
+          type,
+        })
+        .then(() => setFoundUser(null));
     }
   }
 
   return (
     <div className="record-attendance">
       <h2>Record Attendance</h2>
-      <SelectType
-        label="Type"
-        value={type}
-        onSelect={setType}
-        options={[
-          { label: "PRESENT", val: "PRESENT" },
-          { label: "ABSENT", val: "ABSENT" },
-          { label: "LATE", val: "LATE" },
-        ]}
-      />
-      <SelectType
-        label="Quick Mode"
-        options={[
-          { label: "OFF", val: "off" },
-          { label: "ON", val: "on" },
-        ]}
-        value={quickMode}
-        onSelect={setQuickMode}
-      />
-      <h2>Scan</h2>
-      {!foundUser && (
-        <Scanner
-          classNames={{ container: "qr-scanner" }}
-          onScan={(codes) => codes.map(handleReadCode)}
-        />
-      )}
+      {attendanceMutation.isPending ? (
+        <div className="loading" />
+      ) : (
+        <>
+          <SelectType
+            label="Type"
+            value={type}
+            onSelect={setType}
+            options={[
+              { label: "PRESENT", val: "PRESENT" },
+              { label: "ABSENT", val: "ABSENT" },
+              { label: "LATE", val: "LATE" },
+            ]}
+          />
+          <SelectType
+            label="Quick Mode"
+            options={[
+              { label: "OFF", val: "off" },
+              { label: "ON", val: "on" },
+            ]}
+            value={quickMode}
+            onSelect={setQuickMode}
+          />
+          <h2>Scan</h2>
+          {!foundUser && (
+            <Scanner
+              classNames={{ container: "qr-scanner" }}
+              onScan={(codes) => codes.map(handleReadCode)}
+            />
+          )}
 
-      {foundUser && (
-        <div className="action-button">
-          <button className="button primary" onClick={handleRecord}>
-            Record
-          </button>
-          <button className="button outline" onClick={handleRecord}>
-            Cancel
-          </button>
-        </div>
+          {foundUser && (
+            <div className="action-button">
+              <button className="button primary" onClick={handleRecord}>
+                Record
+              </button>
+              <button className="button outline" onClick={handleRecord}>
+                Cancel
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

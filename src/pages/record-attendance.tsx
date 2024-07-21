@@ -1,7 +1,11 @@
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import React from "react";
-import { validate } from "uuid";
-import { AttendanceTypes, useCreateAttendanceMutation } from "../api";
+import { validate as isValidUuid } from "uuid";
+import {
+  AttendanceTypes,
+  useCreateAttendanceMutation,
+  useStudentQuery,
+} from "../api";
 import "./attendance.scss";
 
 export const RecordAttendance = () => {
@@ -11,11 +15,12 @@ export const RecordAttendance = () => {
   const attendanceMutation = useCreateAttendanceMutation();
 
   const handleReadCode = (code: IDetectedBarcode) => {
-    if (code.format != "text") return;
-    const value = code.rawValue;
+    console.log(code);
+    if (code.format != "qr_code") return;
+    const value = `${code.rawValue}`.trim();
 
     // make sure it's a valid uuid
-    if (!validate(value)) return;
+    if (!isValidUuid(value)) return;
 
     if (quickMode == "on") {
       // create attendance if quick mode is on
@@ -49,42 +54,52 @@ export const RecordAttendance = () => {
         <div className="loading" />
       ) : (
         <>
-          <SelectType
-            label="Type"
-            value={type}
-            onSelect={setType}
-            options={[
-              { label: "PRESENT", val: "PRESENT" },
-              { label: "ABSENT", val: "ABSENT" },
-              { label: "LATE", val: "LATE" },
-            ]}
-          />
-          <SelectType
-            label="Quick Mode"
-            options={[
-              { label: "OFF", val: "off" },
-              { label: "ON", val: "on" },
-            ]}
-            value={quickMode}
-            onSelect={setQuickMode}
-          />
-          <h2>Scan</h2>
           {!foundUser && (
-            <Scanner
-              classNames={{ container: "qr-scanner" }}
-              onScan={(codes) => codes.map(handleReadCode)}
-            />
+            <>
+              <SelectType
+                label="Type"
+                value={type}
+                onSelect={setType}
+                options={[
+                  { label: "PRESENT", val: "PRESENT" },
+                  { label: "ABSENT", val: "ABSENT" },
+                  { label: "LATE", val: "LATE" },
+                ]}
+              />
+              <SelectType
+                label="Quick Mode"
+                options={[
+                  { label: "OFF", val: "off" },
+                  { label: "ON", val: "on" },
+                ]}
+                value={quickMode}
+                onSelect={setQuickMode}
+              />
+              <h2>Scan</h2>
+              <Scanner
+                classNames={{ container: "qr-scanner" }}
+                onScan={(codes) => codes.map(handleReadCode)}
+              />
+            </>
           )}
 
           {foundUser && (
-            <div className="action-button">
-              <button className="button primary" onClick={handleRecord}>
-                Record
-              </button>
-              <button className="button outline" onClick={handleRecord}>
-                Cancel
-              </button>
-            </div>
+            <>
+              <div className="found-student">
+                <StudentInfo studentId={foundUser} />
+              </div>
+              <div className="action-button">
+                <button className="button primary" onClick={handleRecord}>
+                  Record
+                </button>
+                <button
+                  className="button outline"
+                  onClick={() => setFoundUser("")}
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
           )}
         </>
       )}
@@ -112,6 +127,27 @@ function SelectType<T>(props: {
           </button>
         ))}
       </div>
+    </div>
+  );
+}
+
+function StudentInfo({ studentId }: { studentId: string }) {
+  const student = useStudentQuery(studentId);
+
+  if (student.isLoading) return <div>Loading...</div>;
+  if (student.isError) return <div>Error loading student</div>;
+
+  return (
+    <div>
+      <div>Student Found</div>
+      <dl>
+        <dt>Name</dt>
+        <dd>{student.data?.name}</dd>
+      </dl>
+      <dl>
+        <dt>Christian Name</dt>
+        <dd>{student.data?.christianName}</dd>
+      </dl>
     </div>
   );
 }

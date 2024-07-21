@@ -23,7 +23,7 @@ export const AxiosInstanceProvider: React.FC<React.PropsWithChildren> = ({
       // },
       null,
       (error) => {
-        logout();
+        if (error.response?.status === 401) logout();
         console.error(error);
         throw error;
       }

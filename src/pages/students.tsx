@@ -53,7 +53,7 @@ export const StudentsList = () => {
             ) : (
               <span />
             )}
-            {!isLoading && students?.length != 0 ? (
+            {!isLoading && students?.length == size ? (
               <button onClick={nextPage} className="button icon primary">
                 <FaAngleRight />
               </button>

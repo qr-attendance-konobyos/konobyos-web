@@ -9,7 +9,7 @@ import {
 import "./attendance.scss";
 
 export const RecordAttendance = () => {
-  const [type, setType] = React.useState<AttendanceTypes>("LATE");
+  const [type, setType] = React.useState<AttendanceTypes>("PRESENT");
   const [quickMode, setQuickMode] = React.useState("off");
   const [foundUser, setFoundUser] = React.useState<string | null>(null);
   const attendanceMutation = useCreateAttendanceMutation();

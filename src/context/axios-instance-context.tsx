@@ -16,18 +16,11 @@ export const AxiosInstanceProvider: React.FC<React.PropsWithChildren> = ({
         Authorization: `Bearer ${token}`,
       },
     });
-    instance.interceptors.response.use(
-      // (value) => {
-      //   value.data = value.data?.data;
-      //   return value;
-      // },
-      null,
-      (error) => {
-        if (error.response?.status === 401) logout();
-        console.error(error);
-        throw error;
-      }
-    );
+    instance.interceptors.response.use(null, (error) => {
+      if (error.response?.status === 401) logout();
+      console.error(error);
+      throw error;
+    });
     return instance;
   }, [logout, token]);
 

@@ -61,6 +61,9 @@ export const RegisterStudent = () => {
           disabled={isLoading}
         />
       </div>
+      {registerStudent.isError && (
+        <span className="error">{registerStudent.error.message}</span>
+      )}
       <button className="button primary" type="submit" disabled={isLoading}>
         Register
       </button>

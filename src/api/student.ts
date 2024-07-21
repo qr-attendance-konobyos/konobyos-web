@@ -31,10 +31,8 @@ export const useCreateStudentMutation = () => {
   const client = useAxiosInstance();
 
   return useMutation({
-    mutationFn: (payload: StudentModel) =>
-      mapAxiosResponse(
-        client.post("/students", payload).then((data) => data.data.data)
-      ),
+    mutationFn: (payload: Omit<StudentModel, "id">) =>
+      mapAxiosResponse(client.post("/students", payload)),
   });
 };
 
@@ -43,9 +41,7 @@ export const useUpdateStudentMutation = (studentId: string) => {
 
   return useMutation({
     mutationFn: (payload: Partial<StudentModel>) =>
-      mapAxiosResponse(
-        client.put(`/students/${studentId}`, payload).then((data) => data.data)
-      ),
+      mapAxiosResponse(client.put(`/students/${studentId}`, payload)),
   });
 };
 

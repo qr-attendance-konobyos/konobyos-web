@@ -1,26 +1,29 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAxiosInstance } from "../context";
+import { mapAxiosResponse } from "./utils";
 
 export const useGetStudentsQuery = ({
   size,
   search,
   page,
 }: {
-  size?: number;
-  page?: number;
+  size: number;
+  page: number;
   search?: string;
 }) => {
   const client = useAxiosInstance();
   return useQuery({
     queryKey: ["get_students", size, page, search],
     queryFn: () =>
-      client.get("/students", {
-        params: {
-          skip: page,
-          take: size,
-          search,
-        },
-      }),
+      mapAxiosResponse<StudentModel[]>(
+        client.get("/students", {
+          params: {
+            skip: page * size,
+            take: size,
+            search,
+          },
+        })
+      ),
   });
 };
 
@@ -29,7 +32,9 @@ export const useCreateStudentMutation = () => {
 
   return useMutation({
     mutationFn: (payload: StudentModel) =>
-      client.post("/students", payload).then((data) => data.data.data),
+      mapAxiosResponse(
+        client.post("/students", payload).then((data) => data.data.data)
+      ),
   });
 };
 
@@ -38,11 +43,14 @@ export const useUpdateStudentMutation = (studentId: string) => {
 
   return useMutation({
     mutationFn: (payload: Partial<StudentModel>) =>
-      client.put(`/students/${studentId}`, payload).then((data) => data.data),
+      mapAxiosResponse(
+        client.put(`/students/${studentId}`, payload).then((data) => data.data)
+      ),
   });
 };
 
-type StudentModel = {
+export type StudentModel = {
+  id: string;
   name: string;
   christianName: string;
   email: string;

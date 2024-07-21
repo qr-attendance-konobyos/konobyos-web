@@ -1,17 +1,17 @@
-import { useUser } from "../api/user";
-import { useAuth } from "../context";
-import "./home.scss";
+import { Outlet } from "react-router-dom";
+import { BottomNavbar } from "../components";
 
 export function Home() {
-  const { logout } = useAuth();
-  const { data: user } = useUser();
+  // const { logout } = useAuth();
+  // const { data: user } = useUser();
   return (
-    <div className="home">
-      <h1> Home Page</h1>
-      <h2>Hello {user?.name}</h2>
+    <>
+      <Outlet />
+      {/*
       <button className="button primary" onClick={() => logout()}>
         Logout
-      </button>
-    </div>
+      </button> */}
+      <BottomNavbar />
+    </>
   );
 }

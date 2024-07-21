@@ -30,6 +30,7 @@ export function Login() {
           autoComplete="current-password"
         />
       </div>
+      {login.error && <div className="error">{login.error.message}</div>}
       <button className="button primary" onClick={() => login.mutate(form)}>
         Log In
       </button>

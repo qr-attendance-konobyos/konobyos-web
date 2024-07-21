@@ -16,4 +16,13 @@
       background-color: var(--primary-dark);
     }
   }
+
+  &.icon {
+    padding: 12px;
+    border-radius: 50%;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

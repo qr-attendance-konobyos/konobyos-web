@@ -20,3 +20,13 @@ export const useFormReducer = <T>(def: T) => {
 
   return { value, register };
 };
+
+export function debounce(func: () => void, timeout = 300) {
+  let timer: string | number | NodeJS.Timeout | undefined;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func();
+    }, timeout);
+  };
+}

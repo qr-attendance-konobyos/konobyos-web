@@ -45,6 +45,14 @@ export const useUpdateStudentMutation = (studentId: string) => {
   });
 };
 
+export const useDeleteStudentMutation = (studentId: string) => {
+  const client = useAxiosInstance();
+
+  return useMutation({
+    mutationFn: () => mapAxiosResponse(client.delete(`/students/${studentId}`)),
+  });
+};
+
 export const useStudentQuery = (studentId: string) => {
   const client = useAxiosInstance();
 

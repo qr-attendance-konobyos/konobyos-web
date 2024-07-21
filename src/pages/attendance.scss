@@ -1,0 +1,25 @@
+.record-attendance {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h2 {
+    margin: 0;
+  }
+
+  .qr-scanner {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+  }
+
+  .action-button {
+    display: flex;
+    gap: 10px;
+
+    > button {
+      flex: 1;
+    }
+  }
+}

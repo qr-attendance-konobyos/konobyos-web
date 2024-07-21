@@ -17,6 +17,25 @@
     }
   }
 
+  &.outline {
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    transition: border 0.7s ease;
+
+    &:hover {
+      border-color: var(--primary-dark);
+    }
+  }
+  &.danger {
+    background-color: var(--danger);
+    transition: background-color 0.7s ease;
+    color: white;
+
+    &:hover {
+      background-color: var(--danger-dark);
+    }
+  }
+
   &.icon {
     padding: 12px;
     border-radius: 50%;

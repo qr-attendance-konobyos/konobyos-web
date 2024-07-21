@@ -1,7 +1,7 @@
 import { FaTimes } from "react-icons/fa";
 import QRCode from "react-qr-code";
 import { useNavigate, useParams } from "react-router-dom";
-import { useStudentQuery } from "../api";
+import { useDeleteStudentMutation, useStudentQuery } from "../api";
 import "./students.scss";
 
 export const StudentDetail = () => {
@@ -11,6 +11,7 @@ export const StudentDetail = () => {
   if (id === undefined) throw new Error("id is required");
 
   const student = useStudentQuery(id);
+  const deleteStudent = useDeleteStudentMutation(id);
 
   if (student.isLoading) return <p>Loading...</p>;
 
@@ -49,6 +50,14 @@ export const StudentDetail = () => {
 
       <h3>QR</h3>
       <QRCode value={studentQRLink} className="qr-code" />
+
+      <h3>Actions</h3>
+      <button
+        onClick={() => deleteStudent.mutateAsync().then(() => navigate(-1))}
+        className="button danger"
+      >
+        Delete
+      </button>
     </div>
   );
 };

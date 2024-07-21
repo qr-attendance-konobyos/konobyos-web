@@ -2,6 +2,7 @@ import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context";
 import { Home, Login } from "./pages";
 import { RegisterStudent } from "./pages/register-student";
+import { StudentDetail } from "./pages/student";
 import { StudentsList } from "./pages/students";
 
 export function App() {
@@ -28,12 +29,13 @@ export function App() {
             element={<h1>Settings ${import.meta.env.VITE_BUILD_TIME}</h1>}
           />
 
-          <Route path="*" element={<Navigate to="/app/students" />} />
+          {/* <Route path="*" element={<Navigate to="/app/students" />} /> */}
         </Route>
         <Route path="students" element={<Outlet />}>
           <Route path="register" element={<RegisterStudent />} />
+          <Route path=":id" element={<StudentDetail />} />
         </Route>
-        <Route path="*" element={<Navigate to="/app/student" />} />
+        {/* <Route path="*" element={<Navigate to="/app/student" />} /> */}
       </Routes>
     </>
   );

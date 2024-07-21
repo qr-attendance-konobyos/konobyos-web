@@ -1,0 +1,16 @@
+dl {
+  margin: 0;
+  margin-bottom: 10px;
+  dt {
+    font-weight: 600;
+  }
+  dd {
+    margin-left: 10px;
+  }
+}
+
+.close-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}

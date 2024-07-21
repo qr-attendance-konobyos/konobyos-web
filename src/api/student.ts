@@ -45,6 +45,16 @@ export const useUpdateStudentMutation = (studentId: string) => {
   });
 };
 
+export const useStudentQuery = (studentId: string) => {
+  const client = useAxiosInstance();
+
+  return useQuery({
+    queryKey: ["student", studentId],
+    queryFn: () =>
+      mapAxiosResponse<StudentModel>(client.get(`/students/${studentId}`)),
+  });
+};
+
 export type StudentModel = {
   id: string;
   name: string;

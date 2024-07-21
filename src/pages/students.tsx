@@ -40,10 +40,14 @@ export const StudentsList = () => {
             <h3 className="no-content">No students found</h3>
           )}
           {students?.map((student: StudentModel) => (
-            <div key={student.id} className="student">
+            <Link
+              to={`/students/${student.id}`}
+              key={student.id}
+              className="student"
+            >
               <div className="name">{student.name}</div>
               <div className="chris-name">{student.christianName}</div>
-            </div>
+            </Link>
           ))}
           <div className="page-controls">
             {page > 0 ? (

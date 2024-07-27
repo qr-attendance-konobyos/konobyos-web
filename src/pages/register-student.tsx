@@ -87,6 +87,14 @@ export const RegisterStudent = () => {
         <button className="button primary" type="submit" disabled={isLoading}>
           Register
         </button>
+        <button
+          className="button outline"
+          type="button"
+          onClick={() => navigate(-1)}
+          disabled={isLoading}
+        >
+          Cancel
+        </button>
       </form>
     </>
   );

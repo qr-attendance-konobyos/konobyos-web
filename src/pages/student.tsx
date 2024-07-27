@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import Modal from "react-modal";
 import QRCode from "react-qr-code";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteStudentMutation, useStudentQuery } from "../api";
@@ -7,6 +9,8 @@ import "./students.scss";
 export const StudentDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const [modalIsDeleteOpen, setIsDeleteOpen] = useState(false);
 
   if (id === undefined) throw new Error("id is required");
 
@@ -52,12 +56,36 @@ export const StudentDetail = () => {
       <QRCode value={studentQRLink} className="qr-code" />
 
       <h3>Actions</h3>
-      <button
-        onClick={() => deleteStudent.mutateAsync().then(() => navigate(-1))}
-        className="button danger"
-      >
-        Delete
+      <button onClick={() => setIsDeleteOpen(true)} className="button danger">
+        Remove Student
       </button>
+
+      <Modal
+        isOpen={modalIsDeleteOpen}
+        onRequestClose={() => setIsDeleteOpen(false)}
+        contentLabel="Remove Student"
+      >
+        <div className="delete-modal">
+          <center>
+            <h3>Are you sure you want to remove {student.data.name}?</h3>
+          </center>
+          <button
+            onClick={() => {
+              deleteStudent.mutate();
+              setIsDeleteOpen(false);
+            }}
+            className="button danger"
+          >
+            Yes Remove
+          </button>
+          <button
+            onClick={() => setIsDeleteOpen(false)}
+            className="button outline"
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

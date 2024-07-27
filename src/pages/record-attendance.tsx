@@ -1,4 +1,6 @@
 import React from "react";
+import { FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { validate as isValidUuid } from "uuid";
 import {
   AttendanceTypes,
@@ -9,6 +11,7 @@ import { QrCodeScanner } from "../components";
 import "./attendance.scss";
 
 export const RecordAttendance = () => {
+  const navigate = useNavigate();
   const [type, setType] = React.useState<AttendanceTypes>("PRESENT");
   const [quickMode, setQuickMode] = React.useState("off");
   const [foundUser, setFoundUser] = React.useState<string | null>(null);
@@ -49,6 +52,12 @@ export const RecordAttendance = () => {
 
   return (
     <div className="record-attendance">
+      <button
+        onClick={() => navigate(-1)}
+        className="button primary icon close-button"
+      >
+        <FaTimes />
+      </button>
       <h2>Record Attendance</h2>
       {attendanceMutation.isPending ? (
         <div className="loading" />

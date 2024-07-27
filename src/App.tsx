@@ -1,11 +1,15 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context";
-import { Home, Login } from "./pages";
-import { RecordAttendance } from "./pages/record-attendance";
-import { RegisterStudent } from "./pages/register-student";
-import { StudentDetail } from "./pages/student";
-import { StudentsList } from "./pages/students";
-
+import {
+  AttendanceReport,
+  Home,
+  Login,
+  RecordAttendance,
+  RegisterStudent,
+  Settings,
+  StudentDetail,
+  StudentsList,
+} from "./pages";
 export function App() {
   const { isAuthenticated } = useAuth();
 
@@ -24,13 +28,13 @@ export function App() {
         <Route path="app" element={<Home />}>
           <Route index element={<StudentsList />} />
           <Route path="students" element={<StudentsList />} />
-          <Route path="attendance" element={<RecordAttendance />} />
-          <Route
-            path="settings"
-            element={<h1>Settings ${import.meta.env.VITE_BUILD_TIME}</h1>}
-          />
+          <Route path="attendance" element={<AttendanceReport />} />
+          <Route path="settings" element={<Settings />} />
 
           <Route path="*" element={<Navigate to="/app/students" />} />
+        </Route>
+        <Route path="attendance" element={<Outlet />}>
+          <Route index element={<RecordAttendance />} />
         </Route>
         <Route path="students" element={<Outlet />}>
           <Route path="register" element={<RegisterStudent />} />

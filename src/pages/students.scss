@@ -1,10 +1,11 @@
 .content.students {
   display: flex;
+
   .header {
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 10px 20px;
+    padding: 20px;
 
     .title-bar {
       display: flex;
@@ -80,5 +81,19 @@
     width: 100%;
     height: auto;
     aspect-ratio: 1;
+  }
+}
+
+.ReactModalPortal {
+  .ReactModal__Content {
+    display: flex;
+    min-height: min-content;
+    height: fit-content;
+    max-height: max-content;
+  }
+  .delete-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }

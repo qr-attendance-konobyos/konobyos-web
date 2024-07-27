@@ -1,4 +1,3 @@
-import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import React from "react";
 import { validate as isValidUuid } from "uuid";
 import {
@@ -6,6 +5,7 @@ import {
   useCreateAttendanceMutation,
   useStudentQuery,
 } from "../api";
+import { QrCodeScanner } from "../components";
 import "./attendance.scss";
 
 export const RecordAttendance = () => {
@@ -14,13 +14,13 @@ export const RecordAttendance = () => {
   const [foundUser, setFoundUser] = React.useState<string | null>(null);
   const attendanceMutation = useCreateAttendanceMutation();
 
-  const handleReadCode = (code: IDetectedBarcode) => {
-    console.log(code);
-    if (code.format != "qr_code") return;
-    const value = `${code.rawValue}`.trim();
+  const handleReadCode = (code: string) => {
+    const value = `${code}`.trim();
 
     // make sure it's a valid uuid
-    if (!isValidUuid(value)) return;
+    if (!isValidUuid(value)) {
+      return alert("invalid scan");
+    }
 
     if (quickMode == "on") {
       // create attendance if quick mode is on
@@ -76,9 +76,10 @@ export const RecordAttendance = () => {
                 onSelect={setQuickMode}
               />
               <h2>Scan</h2>
-              <Scanner
-                classNames={{ container: "qr-scanner" }}
-                onScan={(codes) => codes.map(handleReadCode)}
+              <QrCodeScanner
+                onRead={handleReadCode}
+                id="qr-scanner"
+                className="qr-scanner"
               />
             </>
           )}
